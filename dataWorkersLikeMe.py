@@ -85,26 +85,31 @@ def make_all_data_tables(occupationCode):
         bool: Description of return value
 
     """
+    if occupationCode not in all_occupation_tables:
+        return None
 
     thisOccData = all_occupation_tables[occupationCode]
     occName = nameMap[occupationCode]
 
     # Loop through the dataframes in the dictionary and create plotly figures for each one
 
-    figures = []
-    for title, table in thisOccData.items():
+    rows, columns = [], []
+    for i, (title, table) in enumerate(thisOccData.items()):
         if table is not None:
             if title == 'Employment Outlook':
-                fig = px.line(data = table, x = 'Year', y = 'Number of Workers', title=title)
+                fig = px.line(table, x = 'Year', y = 'Number of Workers', title=title)
             elif title == 'Main Industries':
-                fig = px.bar(data = table, x = 'Main Employing Industries', y = 'Industry (% share)', title=title)
+                fig = px.bar(table, x = 'Main Employing Industries', y = 'Industry (% share)', title=title)
             elif title == 'Education Level':
-                table = table.melt(id_vars = 'Education Level', value_vars=[occName,'All Jobs Average'], var_name = 'Occupation', value_name = 'Percentage (%)')
-                fig = px.bar(data = table, x = 'Education Level', y = 'Percentage (%)', title=title)
-            elif title == 'Age Profile':
                 table = table.melt(id_vars = 'Type of Qualification', value_vars=[occName,'All Jobs Average'], var_name = 'Occupation', value_name = 'Percentage (%)')
-                fig = px.bar(data = table, x = 'Type of Qualification', y = 'Percentage (%)', color='Occupation', title=title)
-            
-            figures.append(html.Div(className = "six columns", children = dcc.Graph(figure=fig)))
+                fig = px.bar(table, x = 'Type of Qualification', y = 'Percentage (%)', color='Occupation', barmode="group", title=title)
+            elif title == 'Age Profile':
+                table = table.melt(id_vars = 'Age Bracket', value_vars=[occName,'All Jobs Average'], var_name = 'Occupation', value_name = 'Percentage (%)')
+                fig = px.bar(table, x = 'Age Bracket', y = 'Percentage (%)', color='Occupation', title=title, barmode="group")
 
-    return html.Div(className = "row", children = figures)
+            columns.append(html.Div(className = "six columns", children = dcc.Graph(figure=fig)))
+            if i % 2 == 1:
+                rows.append(html.Div(className = "row", children = columns))
+                columns = []
+
+    return html.Div(className = "row", children = rows)

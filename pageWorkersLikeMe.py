@@ -12,12 +12,11 @@ tabSearch= dcc.Tab(label='Search', value='Search', style={'text-align':'center',
    html.Div([
     html.Div(dcc.Markdown('''Search for an occupation''')),
     html.Div(className='row',
-       children=[dcc.Dropdown(id="occupationChoiceDropdown", options=[{'label':occ, 'value': occ} for occ in totalOcc4Digit.keys()]),
+       children=[dcc.Dropdown(id="occupationChoiceDropdown", options=[{'label':nameMap[occ], 'value': occ} for occ in totalOcc4Digit.keys() if occ in nameMap]),
         html.Button('Investigate', id='goToWorkerButton', n_clicks=0)
        ]),
    ], className='row', style={'text-align':'center', 'position':'fixed', 'left':'25%', 'bottom':'50%', 'width':'50%'}),
 ])
-
 
 tabWorkersLikeMe = dcc.Tab(label='Workers Like Me', value='WorkersLikeMe', style = {'display':'block'}, children=[
     dcc.Store(id='occupationChoice', storage_type='local', data={'occupation':1113}),
@@ -33,7 +32,6 @@ tabWorkersLikeMe = dcc.Tab(label='Workers Like Me', value='WorkersLikeMe', style
      html.Div(className="row", id="worker-all-plot")
     ]
 )
-
 
 # Define an empty plotly figure
 empty_figure = {}

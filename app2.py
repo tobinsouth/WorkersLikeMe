@@ -44,24 +44,24 @@ app.layout = html.Div(children=[
 
 
 # Update workers like me tab
-@app.callback(Output('worker-map-PUR', 'figure'), Input('occupationChoice','data'))
+@app.callback(Output('worker-map-PUR', 'figure'), Input('occupationChoiceDropdown','value'))
 def update_worker_map_PUR(occupationChoice):
-    if occupationChoice['occupation']:
-        return jobsMap.plot_jobs_on_map(occupationChoice['occupation'], 'PUR')
+    if occupationChoice:
+        return jobsMap.plot_jobs_on_map(occupationChoice, 'PUR')
     else:
         return empty_figure
-@app.callback(Output('worker-map-POW', 'figure'), Input('occupationChoice','data'))
+@app.callback(Output('worker-map-POW', 'figure'), Input('occupationChoiceDropdown','value'))
 def update_worker_map_POW(occupationChoice):
     print('update_worker_map_POW', occupationChoice)
-    if occupationChoice['occupation']:
-        return jobsMap.plot_jobs_on_map(occupationChoice['occupation'], 'POW')
+    if occupationChoice:
+        return jobsMap.plot_jobs_on_map(occupationChoice, 'POW')
     else:
         return empty_figure
 
-@app.callback(Output('worker-all-plot', 'children'), Input('occupationChoice','data'))
+@app.callback(Output('worker-all-plot', 'children'), Input('occupationChoiceDropdown','value'))
 def update_worker_all_plot(occupationChoice):
-    if occupationChoice['occupation']:
-        return make_all_data_tables(occupationChoice['occupation'])
+    if occupationChoice:
+        return make_all_data_tables(occupationChoice)
     else:
         return None
 
