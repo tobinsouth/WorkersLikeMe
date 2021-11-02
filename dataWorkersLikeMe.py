@@ -93,8 +93,8 @@ def make_all_data_tables(occupationCode):
 
     # Loop through the dataframes in the dictionary and create plotly figures for each one
 
-    rows, columns = [], []
-    for i, (title, table) in enumerate(thisOccData.items()):
+    rows, columns, counter = [], [], 0
+    for title, table in thisOccData.items():
         if table is not None:
             if title == 'Employment Outlook':
                 fig = px.line(table, x = 'Year', y = 'Number of Workers', title=title)
@@ -108,10 +108,18 @@ def make_all_data_tables(occupationCode):
                 occNameVal = table.columns[1]
                 table = table.melt(id_vars = 'Age Bracket', value_vars=[occNameVal,'All Jobs Average'], var_name = 'Occupation', value_name = 'Percentage (%)')
                 fig = px.bar(table, x = 'Age Bracket', y = 'Percentage (%)', color='Occupation', title=title, barmode="group")
+            elif title == 'Weekly Earnings':
+                occNameVal = table.columns[1]
+                table = table.dropna()
+                table = table.melt(id_vars = 'Earnings', value_vars=[occNameVal,'All Jobs Average'], var_name = 'Occupation', value_name = 'Weekly Earnings')
+                fig = px.bar(table, x = 'Occupation', y = 'Weekly Earnings', color='Weekly Earnings', title=title)
+            else:
+                continue
 
             columns.append(html.Div(className = "six columns", children = dcc.Graph(figure=fig)))
-            if i % 2 == 1:
+            if counter % 2 == 1:
                 rows.append(html.Div(className = "row", children = columns))
                 columns = []
+            counter += 1
 
     return html.Div(className = "row", children = rows)
