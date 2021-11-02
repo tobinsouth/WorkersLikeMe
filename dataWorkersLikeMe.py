@@ -48,8 +48,8 @@ class JobsMap():
         # occupation_code = str(int(jobs_to_codes[occupation]))
         if occupation is None:
             return None
-        print(occupation)
-        occupation_code = str(int(occupation))
+        occupation_code = occupation
+        occName = nameMap[occupation_code]
         if POWorPUR == 'POW':
             occupation_data = occ4DigitvsSA2POW2016[occupation_code]
         else:
@@ -64,8 +64,8 @@ class JobsMap():
                         color='Counts',
                         hover_name='SA2_NAME16', center={"lat": -34.908458, "lon": 138.629006},
                         hover_data=['SA2_MAIN16', 'SA2_NAME16', 'AREASQKM16', "Counts"], mapbox_style="carto-positron",
-                                        zoom=8,)
-        fig.update_layout(title=str(occupation)+' by place of ')
+                                        zoom=6,)
+        fig.update_layout(title='Place of '+('Work' if POWorPUR=='POW' else 'Residence') + ' of ' + occName)
         return fig
 
 jobsMap = JobsMap()
@@ -101,10 +101,12 @@ def make_all_data_tables(occupationCode):
             elif title == 'Main Industries':
                 fig = px.bar(table, x = 'Main Employing Industries', y = 'Industry (% share)', title=title)
             elif title == 'Education Level':
-                table = table.melt(id_vars = 'Type of Qualification', value_vars=[occName,'All Jobs Average'], var_name = 'Occupation', value_name = 'Percentage (%)')
+                occNameVal = table.columns[1]
+                table = table.melt(id_vars = 'Type of Qualification', value_vars=[occNameVal,'All Jobs Average'], var_name = 'Occupation', value_name = 'Percentage (%)')
                 fig = px.bar(table, x = 'Type of Qualification', y = 'Percentage (%)', color='Occupation', barmode="group", title=title)
             elif title == 'Age Profile':
-                table = table.melt(id_vars = 'Age Bracket', value_vars=[occName,'All Jobs Average'], var_name = 'Occupation', value_name = 'Percentage (%)')
+                occNameVal = table.columns[1]
+                table = table.melt(id_vars = 'Age Bracket', value_vars=[occNameVal,'All Jobs Average'], var_name = 'Occupation', value_name = 'Percentage (%)')
                 fig = px.bar(table, x = 'Age Bracket', y = 'Percentage (%)', color='Occupation', title=title, barmode="group")
 
             columns.append(html.Div(className = "six columns", children = dcc.Graph(figure=fig)))

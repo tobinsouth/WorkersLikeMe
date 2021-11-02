@@ -112,5 +112,8 @@ def switch_tab(AllOccupationsButton, goToWorkerButton):
         return 'WorkersLikeMe'
     else:
         raise dash.exceptions.PreventUpdate
+        
 if __name__ == '__main__':
     app.run_server(debug=True)
+
+server = app.server
