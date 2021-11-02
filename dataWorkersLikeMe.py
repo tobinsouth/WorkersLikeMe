@@ -64,7 +64,7 @@ class JobsMap():
                         color='Counts',
                         hover_name='SA2_NAME16', center={"lat": -34.908458, "lon": 138.629006},
                         hover_data=['SA2_MAIN16', 'SA2_NAME16', 'AREASQKM16', "Counts"], mapbox_style="carto-positron",
-                                        zoom=6,)
+                                        zoom=8,)
         fig.update_layout(title='Place of '+('Work' if POWorPUR=='POW' else 'Residence') + ' of ' + occName)
         return fig
 
