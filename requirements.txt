@@ -1,0 +1,14 @@
+dash
+plotly
+pandas
+numpy
+matplotlib
+scipy
+geopandas
+fiona
+dash_extensions
+dash_core_components
+datetime
+gunicorn
+requests
+asyncio
